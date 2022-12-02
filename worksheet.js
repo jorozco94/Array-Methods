@@ -29,38 +29,139 @@ const characters = [
     },
 ];
 
-//***MAP***
+//***MAP*** - Creates a new array
 //1. Get array of all names
+const names = characters.map(function(character) {
+    return character.name;
+});
+console.log(names);
+
 //2. Get array of all heights
+const heights = characters.map( (character) => character.height );
+console.log(heights);
+
 //3. Get array of objects with just name and height properties
+const charNameHeight = characters.map( function({name, height}) { 
+    return { name, height };
+});
+console.log(charNameHeight);
+
 //4. Get array of all first names
+const firstNames = characters.map( ({name}) => {
+    return name.split(" ")[0];
+})
+console.log(firstNames);
 
 //***REDUCE***
 //1. Get total mass of all characters
+const totalMass = characters.reduce((accu, currVal) => {
+    return accu + currVal.mass;
+}, 0);
+console.log(totalMass);
+
 //2. Get total height of all characters
+const totalHeight = characters.reduce((accu, currVal) => {
+    accu = typeof accu !== 'number' ? accu.height : accu;
+    return accu + currVal.height;
+});
+console.log(totalHeight);
+
 //3. Get total number of characters by eye color
+const eyeColors = characters.reduce((accu, currVal) => {
+    // nullish coalescing operator - if our property is null/undefined, we return 0, else returns accu[currVal.eye_color]
+    const eyeColorCount = accu[currVal.eye_color] ?? 0;
+    return {
+        ...accu,
+        [currVal.eye_color]: eyeColorCount + 1,
+    }
+}, {});
+console.log(eyeColors);
+
 //4. Get total number of characters in all the character names
+const totalNameChars = characters.reduce((accu, currVal) => {
+    // regex to only match letters and nums
+    const charMatchRegex = /[a-z0-9]/gi; 
+    return accu + currVal.name.match(charMatchRegex).length;
+}, 0)
+console.log(totalNameChars);
 
-//***FILTER***
+//***FILTER*** - Makes a shallow copy of an array
 //1. Get characters with mass greater than 100
+const bigCharacters = characters.filter( (character) => character.mass > 100 );
+console.log(bigCharacters);
+
 //2. Get characters with height less than 200
+const shorterCharacters = characters.filter ( function(character) {
+    return character.height < 200;
+})
+console.log(shorterCharacters);
+
 //3. Get all male characters
+const maleCharacters = characters.filter ( function(character) {
+    return character.gender === 'male';
+})
+console.log(maleCharacters);
+
 //4. Get all female characters
+const femaleCharacters = characters.filter( (character) => character.gender === 'female');
+console.log(femaleCharacters);
 
-//***SORT***
-//1. Sort by mass
-//2. Sort by height
-//3. Sort by name
+
+
+// ***SORT*** - Sorts elements in place
+//1. Sort by mass - ASCENDING
+const sortByMass = characters.sort( (a, b) =>  a.mass - b.mass )
+console.log(sortByMass);
+
+//2. Sort by height - DESCENDING
+const sortByHeight = characters.sort( (a, b) => b.height - a.height );
+console.log(sortByHeight);
+
+//3. Sort by name - A to Z
+const sortAlpha = characters.sort( (a, b) => {
+    return a.name.toUpperCase().localeCompare(b.name.toUpperCase());
+});
+console.log(sortAlpha);
+
 //4. Sort by gender
+const sortGender = characters.sort( (a, b) => {
+    return a.gender.localeCompare(b.gender);
+});
+console.log(sortGender);
 
-//***EVERY***
+//***EVERY*** - Tests if all elements in array pass the callback test, returns a boolean
 //1. Does every character have blue eyes?
-//2. Does every character have mass more than 40?
-//3. Is every character shorter than 200?
-//4. Is every character male?
+const isBlueEyes = characters.every((character) => character.eye_color === 'blue');
+console.log(isBlueEyes);
 
-//***SOME***
+//2. Does every character have mass more than 40?
+const isGreater40 = characters.every((character) => character.mass > 40 );
+console.log(isGreater40);
+
+//3. Is every character shorter than 200?
+const isShorter200 = characters.every((character) => character.height < 200 );
+console.log(isShorter200);
+
+//4. Is every character male?
+const isMale = characters.every((character) => character.gender === 'male');
+console.log(isMale);
+
+
+//***SOME*** - Tests if at least 1 el passes callback test
 //1. Is there at least one male character?
+const hasMale = characters.some((character) => character.gender === 'male' );
+console.log(hasMale);
+
 //2. Is there at least one character with blue eyes?
+const hasBlueEye = characters.some((character) => character.eye_color === 'blue');
+console.log(hasBlueEye);
+
 //3. Is there at least one character taller than 210?
+const hasTaller210 = characters.some((character) => character.height > 210 );
+console.log(hasTaller210);
+
 //4. Is there at least one character that has mass less than 50?
+const hasMassLess50 = characters.some((character) => character.mass < 50 );
+console.log(hasMassLess50);
+
+
