@@ -31,9 +31,7 @@ const characters = [
 
 //***MAP*** - Creates a new array
 //1. Get array of all names
-const names = characters.map(function(character) {
-    return character.name;
-});
+const names = characters.map( (character) => character.name );
 console.log(names);
 
 //2. Get array of all heights
@@ -41,47 +39,59 @@ const heights = characters.map( (character) => character.height );
 console.log(heights);
 
 //3. Get array of objects with just name and height properties
-const charNameHeight = characters.map( function({name, height}) { 
-    return { name, height };
-});
+const charNameHeight = characters.map( ({name, height}) => { name, height });
 console.log(charNameHeight);
 
 //4. Get array of all first names
-const firstNames = characters.map( ({name}) => {
-    return name.split(" ")[0];
-})
+const firstNames = characters.map( ({name}) => name.split(" ")[0] );
 console.log(firstNames);
 
 //***REDUCE***
 //1. Get total mass of all characters
-const totalMass = characters.reduce((accu, currVal) => {
-    return accu + currVal.mass;
+const totalMass = characters.reduce((acc, curr) => {
+    return acc + curr.mass;
 }, 0);
 console.log(totalMass);
 
 //2. Get total height of all characters
-const totalHeight = characters.reduce((accu, currVal) => {
-    accu = typeof accu !== 'number' ? accu.height : accu;
-    return accu + currVal.height;
-});
+const totalHeight = characters.reduce((acc, curr) => {
+    return acc + curr.height;
+}, 0);
 console.log(totalHeight);
 
 //3. Get total number of characters by eye color
-const eyeColors = characters.reduce((accu, currVal) => {
-    // nullish coalescing operator - if our property is null/undefined, we return 0, else returns accu[currVal.eye_color]
-    const eyeColorCount = accu[currVal.eye_color] ?? 0;
+//3.1 Given an array of characters (characters ) , and a string, ( eyeColor) , create a function that returns the number of characters that have that eyeColor.  Use reduce .    getEyeColorCount(characters, blue) should return 2;
+const getEyeColorCount = function(characters, eyeColor) {
+    return characters.reduce( (acc, curr) => {
+        return curr.eye_color === eyeColor ? acc + 1 : acc;
+    }, 0)
+}
+console.log(getEyeColorCount(characters, "blue"))
+
+//3.2 Given an array of characters (characters), create a function that returns an object that contains the count of how many characters have each eye color.  Use reduce.  In your case, try not to use eyeColorCount variable and spread operator.  getEyeColorCountObj(characters) should return:
+const getEyeColorCountObj = function(characters) {
+    return characters.reduce( (acc, curr) => {
+        acc.hasOwnProperty(curr.eye_color) ? acc[curr.eye_color]++ : acc[curr.eye_color] = 1;
+        return acc;
+    }, {})
+}
+console.log(getEyeColorCountObj(characters))
+
+const eyeColors = characters.reduce((acc, curr) => {
+    // nullish coalescing operator - if our property is null/undefined, we return 0, else returns acc[curr.eye_color]
+    const eyeColorCount = acc[curr.eye_color] ?? 0;
     return {
-        ...accu,
-        [currVal.eye_color]: eyeColorCount + 1,
+        ...acc,
+        [curr.eye_color]: eyeColorCount + 1,
     }
 }, {});
 console.log(eyeColors);
 
 //4. Get total number of characters in all the character names
-const totalNameChars = characters.reduce((accu, currVal) => {
+const totalNameChars = characters.reduce((acc, curr) => {
     // regex to only match letters and nums
     const charMatchRegex = /[a-z0-9]/gi; 
-    return accu + currVal.name.match(charMatchRegex).length;
+    return acc + curr.name.match(charMatchRegex).length;
 }, 0)
 console.log(totalNameChars);
 
@@ -91,15 +101,11 @@ const bigCharacters = characters.filter( (character) => character.mass > 100 );
 console.log(bigCharacters);
 
 //2. Get characters with height less than 200
-const shorterCharacters = characters.filter ( function(character) {
-    return character.height < 200;
-})
+const shorterCharacters = characters.filter ( (character) => character.height < 200);
 console.log(shorterCharacters);
 
 //3. Get all male characters
-const maleCharacters = characters.filter ( function(character) {
-    return character.gender === 'male';
-})
+const maleCharacters = characters.filter ( (character) => character.gender === 'male');
 console.log(maleCharacters);
 
 //4. Get all female characters
